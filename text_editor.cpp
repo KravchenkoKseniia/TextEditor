@@ -47,7 +47,7 @@ int appendText(char *enteredText)
 		printf("Opps... Entered text is empty.\n ");
 	}
 
-	strcat(userText, enteredText);
+	strcat_s(userText, capacityNeeded, enteredText);
 	length += textLen;
 
 	return 0;
