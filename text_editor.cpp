@@ -2,10 +2,55 @@
 #include<stdio.h>
 #include<string.h>
 
+const int INITIAL_CAPACITY = 100;
 
-void appendText()
+char *userText = NULL; // pointer
+int capacity = 0; //  capacity of the text
+int length = 0; //  text length
+
+
+int appendText(char *enteredText)
 {
-	printf("There will be a function to appent text symbols to the end\n");
+	int textLen = strlen(enteredText);
+	int capacityNeeded = length + textLen + 1;
+
+	if (capacityNeeded > capacity)
+	{
+		while (capacity < capacityNeeded)
+		{
+			if (capacity == 0) 
+			{
+				capacity = INITIAL_CAPACITY;
+			}
+			else 
+			{
+				capacity = capacity * 2;
+			}
+		}
+
+		userText = (char*)realloc(userText, capacity * sizeof(char));
+		if (userText == NULL)
+		{
+			printf("Memory allocation failed.\n");
+			return 1;
+		}
+	}
+
+	if (enteredText == NULL)
+	{
+		printf("Opps... Entered text is null.\n");
+		return 1;
+	}
+
+	if (enteredText[0] == '\0')
+	{
+		printf("Opps... Entered text is empty.\n ");
+	}
+
+	strcat(userText, enteredText);
+	length += textLen;
+
+	return 0;
 }
 
 void newLine()
@@ -26,6 +71,7 @@ void saveInfo()
 void printInfo()
 {
 	printf("There will be a function to print the info\n");
+	printf("Your text: \n%s\n", userText);
 }
 
 void insertInfo()
@@ -41,6 +87,7 @@ void search()
 void cleanConsole()
 {
 	printf("There will be a function to clean the console\n");
+	system("clear");
 }
 
 void helpInfo()
@@ -62,8 +109,11 @@ void commandParser(char *cmd)
 	switch (userCommand)
 	{
 	case 1:
+		char userText[INITIAL_CAPACITY];
 		printf("Executing command 1\n\n");
-		appendText();			   
+		printf("Enter text to append: ");
+		fgets(userText, sizeof(userText), stdin);
+		appendText(userText);			   
 		break;					   
 	case 2:						   
 		printf("Executing command 2\n\n");
@@ -100,11 +150,21 @@ void commandParser(char *cmd)
 }
 
 int main() {
-	char userInput[100];
 
 	printf("Welcome to Text Editor!\n");
 	printf("Type '--help' to see the list of commands\n\n");
 
+	userText = (char*)calloc(INITIAL_CAPACITY, sizeof(char));
+
+	if (userText == NULL)
+	{
+		printf("Memory allocation failed\n");
+		return 1;
+	}
+	capacity = INITIAL_CAPACITY;
+
+
+	char userInput[10];
 	while (true)
 	{
 		printf(">> ");
@@ -131,5 +191,6 @@ int main() {
 
 	}
 
+	free(userText);
 	return 0;
 }
