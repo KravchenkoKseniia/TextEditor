@@ -5,14 +5,14 @@
 const int INITIAL_CAPACITY = 100;
 
 char *userText = NULL; // pointer
-int capacity = 0; //  capacity of the text
-int length = 0; //  text length
+size_t capacity = 0; //  capacity of the text
+size_t length = 0; //  text length
 
 
 int appendText(char *enteredText)
 {
-	int textLen = strlen(enteredText);
-	int capacityNeeded = length + textLen + 1;
+	size_t textLen = strlen(enteredText);
+	size_t capacityNeeded = length + textLen + 1;
 
 	if (capacityNeeded > capacity)
 	{
@@ -113,6 +113,12 @@ void commandParser(char *cmd)
 		printf("Executing command 1\n\n");
 		printf("Enter text to append: ");
 		fgets(userText, sizeof(userText), stdin);
+
+		if (userText[strlen(userText) - 1] == '\n')
+		{
+			userText[strlen(userText) - 1] = '\0';
+		}
+
 		appendText(userText);			   
 		break;					   
 	case 2:						   
