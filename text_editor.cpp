@@ -28,7 +28,13 @@ int appendText(char *enteredText)
 			}
 		}
 
-		userText = (char*)realloc(userText, capacity * sizeof(char));
+		char* temp = (char*)realloc(userText, capacity * sizeof(char));
+
+		if (temp != NULL)
+		{
+			userText = temp;
+		}
+
 		if (userText == NULL)
 		{
 			printf("Memory allocation failed.\n");
@@ -47,7 +53,7 @@ int appendText(char *enteredText)
 		printf("Opps... Entered text is empty.\n ");
 	}
 
-	strcat_s(userText, capacityNeeded, enteredText);
+	strcat_s(userText, capacity, enteredText);
 	length += textLen;
 
 	return 0;
