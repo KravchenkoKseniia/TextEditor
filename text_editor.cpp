@@ -37,62 +37,152 @@ int appendText(char *enteredText)
 
 		if (userText == NULL)
 		{
-			printf("Memory allocation failed.\n");
+			printf(">>Memory allocation failed.\n");
+			free(userText);
 			return 1;
 		}
 	}
 
 	if (enteredText == NULL)
 	{
-		printf("Opps... Entered text is null.\n");
+		printf(">>Opps... Entered text is null.\n");
 		return 1;
 	}
 
 	if (enteredText[0] == '\0')
 	{
-		printf("Opps... Entered text is empty.\n ");
+		printf(">>Opps... Entered text is empty.\n ");
 	}
 
 	strcat_s(userText, capacity, enteredText);
 	length += textLen;
+
+	printf(">>Text has been appended successfully!:)\n");
 
 	return 0;
 }
 
 void newLine()
 {
-	printf("There will be a function to start new line\n");
+	printf("*There will be a function to start new line*\n");
 }
 
-void loadFile()
+int loadFile(char *fileName)
 {
-	printf("There will be a function to load the info to a file\n");
+	printf("*There will be a function to load the info to a file*\n");
+
+	FILE* file;
+
+	errno_t err;
+
+	err = fopen_s(&file, fileName, "r");
+
+	if (err != 0)
+	{
+		printf(">>There no file.\n");
+		return 1;
+	}
+
+	char *buffer = NULL;
+	size_t bufferCapacity = 0;
+	size_t bufferLength = 0;
+
+	while (1)
+	{
+		char fileText[INITIAL_CAPACITY];
+
+		if (fgets(fileText, sizeof(fileText), file) == NULL)
+		{
+			break;
+		}
+
+		size_t fileTextLen = strlen(fileText);
+		size_t bufferCapacityNeeded = fileTextLen + bufferLength + 1;
+
+		if (bufferCapacity < bufferCapacityNeeded)
+		{
+			if (bufferCapacity == 0)
+			{
+				bufferCapacity = INITIAL_CAPACITY;
+			}
+			else
+			{
+				bufferCapacity = bufferCapacity * 2;
+			}
+		}
+
+		char* tempBuffer = (char*)realloc(buffer, bufferCapacity * sizeof(char));
+
+		if (tempBuffer != NULL)
+		{
+			buffer = tempBuffer;
+		}
+
+		if (buffer == NULL)
+		{
+			printf(">>Memory allocation for buffer failed.\n");
+			free(buffer);
+			fclose(file);
+			return 1;
+		}
+
+		strcpy_s(buffer + bufferLength, bufferCapacity - bufferLength, fileText);
+		bufferLength += fileTextLen;
+	}
+
+	fclose(file);
+	appendText(buffer);
+	free(buffer);
+	return 0;
 }
 
-void saveInfo()
+int saveInfo(char *fileName)
 {
-	printf("There will be a function to save the info to a file\n");
+	printf("*There will be a function to save the info to a file*\n");
+
+	FILE *file;
+
+	errno_t err;		// chat gpt 
+
+	err = fopen_s(&file, fileName, "a");		
+
+	if (err != 0)
+	{
+		printf(">>There is no file.\n");
+		return 1;
+	}
+
+	if (userText[0] == '\0')
+	{
+		printf(">>Attention! You have no text to save into the file. It will be an empty file.\n");
+	}
+
+	fputs(userText, file);
+
+	printf(">>Text has been saved successfully.\n");
+	fclose(file);
+	return 0;
 }
 
 void printInfo()
 {
-	printf("There will be a function to print the info\n");
+	printf("*There will be a function to print the info*\n");
 	printf("Your text: \n%s\n", userText);
 }
 
 void insertInfo()
 {
-	printf("There will be a function to insert the text by line and symbol index\n");
+	printf("*There will be a function to insert the text by line and symbol index*\n");
 }
 
 void search()
 {
-	printf("There will be a function to search\n");
+	printf("*There will be a function to search*\n");
 }
 
 void cleanConsole()
 {
-	printf("There will be a function to clean the console\n");
+	printf("*There will be a function to clean the console*\n");
 	system("clear");
 }
 
@@ -116,8 +206,8 @@ void commandParser(char *cmd)
 	{
 	case 1:
 		char userText[INITIAL_CAPACITY];
-		printf("Executing command 1\n\n");
-		printf("Enter text to append: ");
+		printf(">>Executing command 1\n\n");
+		printf(">>Enter text to append: ");
 		fgets(userText, sizeof(userText), stdin);
 
 		if (userText[strlen(userText) - 1] == '\n')
@@ -128,16 +218,34 @@ void commandParser(char *cmd)
 		appendText(userText);			   
 		break;					   
 	case 2:						   
-		printf("Executing command 2\n\n");
+		printf(">>Executing command 2\n\n");
 		newLine();				   
 		break;					   
-	case 3:						   
+	case 3:
+		char fileName[INITIAL_CAPACITY];
 		printf("Executing command 3\n\n");
-		loadFile();				   
+		printf("Enter the file name for loading: \n");
+		fgets(fileName, sizeof(fileName), stdin);
+
+		if (fileName[strlen(fileName) - 1] == '\n')
+		{
+			fileName[strlen(fileName) - 1] = '\0';
+		}
+		
+		loadFile(fileName);				   
 		break;					   
-	case 4:						   
+	case 4:
+		char loadFile[INITIAL_CAPACITY];
 		printf("Executing command 4\n\n");
-		saveInfo();
+		printf("Enter the file name for saving: \n");
+		fgets(loadFile, sizeof(loadFile), stdin);
+
+		if (loadFile[strlen(loadFile) - 1] == '\n')
+		{
+			loadFile[strlen(loadFile) - 1] = '\0';
+		}
+
+		saveInfo(loadFile);
 		break;
 	case 5:
 		printf("Executing command 5\n\n");
@@ -177,7 +285,7 @@ int main() {
 
 
 	char userInput[10];
-	while (true)
+ 	while (true)
 	{
 		printf(">> ");
 		fgets(userInput, sizeof(userInput), stdin);
