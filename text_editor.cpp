@@ -65,6 +65,8 @@ int appendText(char *enteredText)
 void newLine()
 {
 	printf("*There will be a function to start new line*\n");
+	char newLine[] = "\n";
+	appendText(newLine);
 }
 
 int loadFile(char *fileName)
