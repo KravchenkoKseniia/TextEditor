@@ -20,11 +20,11 @@ int appendText(char *enteredText)
 		{
 			if (capacity == 0) 
 			{
-				capacity = INITIAL_CAPACITY;
+				capacity = sizeof(enteredText);
 			}
 			else 
 			{
-				capacity = capacity * 2;
+				capacity += sizeof(enteredText);
 			}
 		}
 
@@ -60,6 +60,53 @@ int appendText(char *enteredText)
 	printf(">>Text has been appended successfully!:)\n");
 
 	return 0;
+}
+
+int toEnterText()
+{
+	char* userEnterText = NULL;
+
+	userEnterText = (char*)calloc(INITIAL_CAPACITY, sizeof(char));
+
+	if (userEnterText == NULL)
+	{
+		printf("Memory allocation failed\n");
+		return 1;
+	}
+
+	fgets(userEnterText, INITIAL_CAPACITY, stdin);
+
+	size_t userEnterTextLen = strlen(userEnterText);
+
+	if (userEnterText[0] == '\0')
+	{
+		printf(">>Opps... Entered text is empty.\n ");
+	}
+
+	if ((userEnterTextLen >= INITIAL_CAPACITY - 1) && (userEnterText[userEnterTextLen - 1] == '\n'))
+	{
+		char *temp = (char*)realloc(userEnterText, (INITIAL_CAPACITY + userEnterTextLen) * sizeof(char));
+
+		if (temp != NULL)
+		{
+			userEnterText = temp;
+		}
+
+		if (userEnterText == NULL)
+		{
+			printf("Memory allocation failed\n");
+			return 1;
+		}
+
+	}
+
+	if (userEnterText[strlen(userEnterText) - 1] == '\n')
+	{
+		userEnterText[strlen(userEnterText) - 1] = '\0';
+	}
+
+	appendText(userEnterText);
+	free(userEnterText);
 }
 
 void newLine()
@@ -142,6 +189,8 @@ int saveInfo(char *fileName)
 {
 	printf("*There will be a function to save the info to a file*\n");
 
+	// TODO: Add a checking for the file existence
+
 	FILE *file;
 
 	errno_t err;		// chat gpt 
@@ -177,15 +226,21 @@ void insertInfo()
 	printf("*There will be a function to insert the text by line and symbol index*\n");
 }
 
-void search()
+int search(char *word)
 {
 	printf("*There will be a function to search*\n");
+
+	int i = 0;
+
+	
+
+	return 0;
 }
 
 void cleanConsole()
 {
 	printf("*There will be a function to clean the console*\n");
-	system("clear");
+	system("cls");
 }
 
 void helpInfo()
@@ -200,24 +255,18 @@ void helpInfo()
 	printf("Command 8:  Clearing the console\n\n");
 }
 
-void commandParser(char *cmd)
+int commandParser(char *cmd)
 {
 	int userCommand = atoi(cmd);
 
 	switch (userCommand)
 	{
 	case 1:
-		char userText[INITIAL_CAPACITY];
+
 		printf(">>Executing command 1\n\n");
 		printf(">>Enter text to append: ");
-		fgets(userText, sizeof(userText), stdin);
 
-		if (userText[strlen(userText) - 1] == '\n')
-		{
-			userText[strlen(userText) - 1] = '\0';
-		}
-
-		appendText(userText);			   
+		toEnterText();
 		break;					   
 	case 2:						   
 		printf(">>Executing command 2\n\n");
@@ -258,8 +307,17 @@ void commandParser(char *cmd)
 		insertInfo();
 		break;
 	case 7:
+		char searchWord[INITIAL_CAPACITY];
 		printf("Executing command 7\n\n");
-		search();
+		printf("Enter text to search: \n");
+		fgets(searchWord, sizeof(searchWord), stdin);
+
+		if (searchWord[strlen(searchWord) - 1] == '\n')
+		{
+			searchWord[strlen(searchWord) - 1] = '\0';
+		}
+
+		search(searchWord);
 		break;
 	case 8:
 		printf("Executing command 8\n\n");
@@ -269,6 +327,8 @@ void commandParser(char *cmd)
 		printf("The command is not implemented. Type '--help' for available commands.\n\n");
 		break;
 	}
+
+	return 0;
 }
 
 int main() {
