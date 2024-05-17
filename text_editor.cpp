@@ -285,6 +285,8 @@ int search(char *word)
 
 	for (i = 0; userText[i] != '\0'; i++)
 	{
+		found = 1;
+
 		if (userText[i] == '\n')
 		{
 			lineIndex++;
@@ -315,7 +317,7 @@ int search(char *word)
 
 	if (found == 0)
 	{
-		printf("There are no substring.\n");
+		printf("There are no substrings.\n");
 	}
 
 	return 0;
