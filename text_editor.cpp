@@ -230,9 +230,49 @@ int search(char *word)
 {
 	printf("*There will be a function to search*\n");
 
-	int i = 0;
+	int i, j;
 
-	
+	int found = 1;
+
+	int lineIndex = 0;
+	int wordIndex = 0;
+
+	int wordLen = strlen(word);
+
+	for (i = 0; userText[i] != '\0'; i++)
+	{
+		if (userText[i] == '\n')
+		{
+			lineIndex++;
+			wordIndex = 0;
+		}
+		else if (userText[i] == ' ')
+		{
+			wordIndex++; 
+		}
+		else 
+		{
+
+			for (j = 0; j < wordLen; j++)
+			{
+				if (userText[i + j] != word[j])
+				{
+					found = 0;							// chat gpt
+					break;
+				}
+			}
+
+			if (found)
+			{
+				printf("Text is present in this position: %d %d \n", lineIndex, wordIndex);
+			}
+		}
+	}
+
+	if (found == 0)
+	{
+		printf("There are no substring.\n");
+	}
 
 	return 0;
 }
@@ -308,9 +348,10 @@ int commandParser(char *cmd)
 		break;
 	case 7:
 		char searchWord[INITIAL_CAPACITY];
+
 		printf("Executing command 7\n\n");
 		printf("Enter text to search: \n");
-		fgets(searchWord, sizeof(searchWord), stdin);
+		fgets(searchWord, INITIAL_CAPACITY, stdin);
 
 		if (searchWord[strlen(searchWord) - 1] == '\n')
 		{
