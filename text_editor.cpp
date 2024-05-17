@@ -265,59 +265,62 @@ void printInfo()
 	printf("Your text: \n%s\n", userText);
 }
 
-void insertInfo()
+/*int insertInfo(char* word, int lineIndex, int charIndex)
 {
 	printf("*There will be a function to insert the text by line and symbol index*\n");
-}
+
+	length = strlen(userText);
+	int substringLen = strlen(word);
+	int neededLen = length + substringLen + 1;
+
+	char* temp = (char*)malloc(neededLen * sizeof(char));
+
+	if (temp == NULL)
+	{
+		printf("Memory allocation failed\n");
+		return 1;
+	}
+
+
+	
+
+	return 0;
+}*/
 
 int search(char *word)
 {
 	printf("*There will be a function to search*\n");
 
-	int i, j;
+	char* currentPosition = userText;
+	int lineIndex = 0; 
+	int counter = 0;
 
-	int found = 1;
+	
 
-	int lineIndex = 0;
-	int wordIndex = 0;
-
-	int wordLen = strlen(word);
-
-	for (i = 0; userText[i] != '\0'; i++)
+	while ((currentPosition = strstr(currentPosition, word)) != NULL)
 	{
-		found = 1;
+		counter++;
 
-		if (userText[i] == '\n')
-		{
-			lineIndex++;
-			wordIndex = 0;
-		}
-		else if (userText[i] == ' ')
-		{
-			wordIndex++; 
-		}
-		else 
-		{
+		lineIndex = 0;
 
-			for (j = 0; j < wordLen; j++)
+		for (char* i = userText; i < currentPosition; i++)
+		{
+			if (*i == '\n')
 			{
-				if (userText[i + j] != word[j])
-				{
-					found = 0;							// chat gpt
-					break;
-				}
-			}
-
-			if (found)
-			{
-				printf("Text is present in this position: %d %d \n", lineIndex, wordIndex);
+				lineIndex++;
 			}
 		}
+
+		int wordIndex = currentPosition - userText;
+
+		printf(" Text is present in this position: %d %d\n", lineIndex, wordIndex);
+
+		currentPosition = currentPosition + strlen(word);
 	}
 
-	if (found == 0)
+	if (counter == 0)
 	{
-		printf("There are no substrings.\n");
+		printf("No such substring.\n");
 	}
 
 	return 0;
@@ -389,8 +392,14 @@ int commandParser(char *cmd)
 		printInfo();
 		break;
 	case 6:
+		int lineIndex;
+		int wordIndex;
 		printf("Executing command 6\n\n");
-		insertInfo();
+		printf("Choose line and index: \n");
+
+
+
+		//insertInfo();
 		break;
 	case 7:
 		char searchWord[INITIAL_CAPACITY];
