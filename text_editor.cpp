@@ -9,6 +9,25 @@ size_t capacity = 0; //  capacity of the text
 size_t length = 0; //  text length
 
 
+bool file_exists(const char* filename)
+{
+	FILE* file = nullptr;
+	
+	errno_t err;
+	
+	err = fopen_s(&file, filename, "r");
+
+	bool is_exists = false;
+
+	if (err == 0)
+	{
+		is_exists = true;
+		fclose(file);
+	}
+
+	return is_exists;
+}
+
 int appendText(char *enteredText)
 {
 	size_t textLen = strlen(enteredText);
@@ -187,6 +206,8 @@ int loadFile(char *fileName)
 
 int saveInfo(char *fileName)
 {
+	int answer;
+
 	printf("*There will be a function to save the info to a file*\n");
 
 	// TODO: Add a checking for the file existence
@@ -195,7 +216,30 @@ int saveInfo(char *fileName)
 
 	errno_t err;		// chat gpt 
 
-	err = fopen_s(&file, fileName, "a");		
+	if (file_exists(fileName))
+	{
+		printf("Do you want to overwrite the file: (1/0)\n");
+		scanf_s("%d", &answer);
+
+		if (answer == 1)
+		{
+			err = fopen_s(&file, fileName, "w");
+		}
+		else if (answer == 0)
+		{
+			err = fopen_s(&file, fileName, "a");
+		}
+		else 
+		{
+			printf("You can write only 1 or 0... Try again\n");
+			return 0;
+		}
+
+	}
+	else 
+	{
+		err = fopen_s(&file, fileName, "a");
+	}
 
 	if (err != 0)
 	{
@@ -414,6 +458,7 @@ int main() {
 
 	}
 
+	
 	free(userText);
 	return 0;
 }
