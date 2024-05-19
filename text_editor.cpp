@@ -265,63 +265,121 @@ void printInfo()
 	printf("Your text: \n%s\n", userText);
 }
 
-/*int insertInfo(char* word, int lineIndex, int charIndex)
+int insertInfo(char* word, int lineIndex, int charIndex)
 {
-	printf("*There will be a function to insert the text by line and symbol index*\n");
-
 	length = strlen(userText);
 	int substringLen = strlen(word);
-	int neededLen = length + substringLen + 1;
+	int capacityNeeded = length + substringLen + 1;
 
-	char* temp = (char*)malloc(neededLen * sizeof(char));
-
-	if (temp == NULL)
+	if (capacityNeeded > capacity)
 	{
-		printf("Memory allocation failed\n");
+		while (capacity < capacityNeeded)
+		{
+			if (capacity == 0)
+			{
+				capacity = sizeof(word);
+			}
+			else
+			{
+				capacity += sizeof(word);
+			}
+		}
+	}
+
+	char* temp = (char*)realloc(userText, capacity * sizeof(char));
+
+	if (temp != NULL)
+	{
+		userText = temp;
+	}
+
+	if (userText == NULL)
+	{
+		printf(">>Memory allocation failed.\n");
+		free(userText);
 		return 1;
 	}
 
+	size_t position = 0;
+	int lineNumber = 0;
 
-	
+	while ((lineNumber < lineIndex) && (position < length))
+	{
+		if (userText[position] == '\n')
+		{
+			lineNumber++;
+		}
+		position++; 
+	}
+
+	position += charIndex;
+
+	if (position > length)
+	{
+		position = length;
+	}
+
+	errno_t err;
+
+	err = memmove_s(userText + position + substringLen, capacity - position - substringLen,    // chat gpt
+		userText + position, length - position + 1);
+
+	if (err != 0)
+	{
+		printf("Memory moving failed.\n");
+		return 1;
+	}
+
+	err = memcpy_s(userText + position, substringLen, word, substringLen);
+
+	if (err != 0)
+	{
+		printf("Insertion failed.\n");
+		return 1;
+	}
+
+	length += substringLen;
 
 	return 0;
-}*/
+}
 
 int search(char *word)
 {
-	printf("*There will be a function to search*\n");
+	int wordLen = strlen(word);
+	length = strlen(userText);
 
-	char* currentPosition = userText;
-	int lineIndex = 0; 
-	int counter = 0;
-
-	
-
-	while ((currentPosition = strstr(currentPosition, word)) != NULL)
+	if (wordLen == 0)
 	{
-		counter++;
+		printf(">>Opps... Entered text is empty.\n ");
+	}
 
-		lineIndex = 0;
+	if (wordLen > length)
+	{
+		printf(">>The word is not found.\n");
+		return 1;
+	}
 
-		for (char* i = userText; i < currentPosition; i++)
+	int newLineIndex = 0;
+	int wordIndex = 0;
+
+	for (int i = 0; i <= length - wordLen; i++)
+	{
+		if (userText[i] == '\n')
 		{
-			if (*i == '\n')
-			{
-				lineIndex++;
-			}
+			newLineIndex++;
+			wordIndex = 0;
+			continue;
 		}
 
-		int wordIndex = currentPosition - userText;
+		if (strncmp(&userText[i], word, wordLen) == 0) 
+		{
+			printf(">>The word is found at line %d and index %d.\n", newLineIndex, wordIndex);
+		}
 
-		printf(" Text is present in this position: %d %d\n", lineIndex, wordIndex);
-
-		currentPosition = currentPosition + strlen(word);
+		wordIndex++;
 	}
 
-	if (counter == 0)
-	{
-		printf("No such substring.\n");
-	}
+	printf(">>No such word.\n");
 
 	return 0;
 }
@@ -394,12 +452,27 @@ int commandParser(char *cmd)
 	case 6:
 		int lineIndex;
 		int wordIndex;
+		char substringWord[INITIAL_CAPACITY];
 		printf("Executing command 6\n\n");
 		printf("Choose line and index: \n");
 
+		if (scanf_s("%d %d", &lineIndex, &wordIndex) != 2) {
+			printf("Invalid input. Please enter line index and word index.\n");
+			return 1;
+		}
 
+		int c;
+		while ((c = getchar()) != '\n' && c != EOF);  //chat gpt
+		printf("Enter text to insert: \n");
 
-		//insertInfo();
+		fgets(substringWord, sizeof(substringWord), stdin);
+
+		if (substringWord[strlen(substringWord) - 1] == '\n')
+		{
+			substringWord[strlen(substringWord) - 1] = '\0';
+		}
+
+		insertInfo(substringWord, lineIndex, wordIndex);
 		break;
 	case 7:
 		char searchWord[INITIAL_CAPACITY];
