@@ -130,14 +130,14 @@ int toEnterText()
 
 void newLine()
 {
-	printf("*There will be a function to start new line*\n");
+	
 	char newLine[] = "\n";
 	appendText(newLine);
 }
 
 int loadFile(char *fileName)
 {
-	printf("*There will be a function to load the info to a file*\n");
+	
 
 	FILE* file;
 
@@ -208,7 +208,6 @@ int saveInfo(char *fileName)
 {
 	int answer;
 
-	printf("*There will be a function to save the info to a file*\n");
 
 	// TODO: Add a checking for the file existence
 
@@ -261,7 +260,6 @@ int saveInfo(char *fileName)
 
 void printInfo()
 {
-	printf("*There will be a function to print the info*\n");
 	printf("Your text: \n%s\n", userText);
 }
 
@@ -386,7 +384,6 @@ int search(char *word)
 
 void cleanConsole()
 {
-	printf("*There will be a function to clean the console*\n");
 	system("cls");
 }
 
