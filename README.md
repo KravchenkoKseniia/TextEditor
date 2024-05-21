@@ -1,11 +1,17 @@
 # TextEditor
 ### Task milestones 
-[1. Implement input command parser ](#pa1)  
+[1. Implement input command parser ](#pa1) 
+
 [2. Implement text memory storage and implemented function to append text](#pa2)  
+
 [3. Implement text memory printing to console](#pa3)  
-[4. Implement the logic to save text to file](#pa4)  
+
+[4. Implement the logic to save text to file](#pa4)
+
 [5. Implement the logic to load text from file](#pa5)
+
 [6. Implement substring search mechanism](#pa6) 
+
 [7. Implement substring insertion mechanism](#pa7) 
 
 <a name="pa1"></a>
