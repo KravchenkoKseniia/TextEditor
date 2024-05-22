@@ -255,6 +255,18 @@ int saveInfo(char *fileName)
 
 	printf(">>Text has been saved successfully.\n");
 	fclose(file);
+
+	free(userText);
+
+	userText = (char*)calloc(INITIAL_CAPACITY, sizeof(char));
+
+	if (userText == NULL)
+	{
+		printf(">>Memory allocation failed.\n");
+		free(userText);
+		return 1;
+	}
+
 	return 0;
 }
 
