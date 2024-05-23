@@ -50,11 +50,4 @@
 ![clean](https://github.com/KravchenkoKseniia/TextEditor/assets/145661899/19c211f4-c93b-4396-897d-26bba5a09694)
 
 
-
-
-
-
-
-
-
-
+// Comment: add the test cases as mentioned in slack (can be a separate file)
