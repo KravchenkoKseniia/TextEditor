@@ -277,6 +277,12 @@ void printInfo()
 
 int insertInfo(char* word, int lineIndex, int charIndex)
 {
+	if (word == NULL || word[0] == '\0')
+	{
+		printf("There are no word to insert. Please, try again.\n");
+		return 0;
+	}
+
 	length = strlen(userText);
 	int substringLen = strlen(word);
 	int capacityNeeded = length + substringLen + 1;
