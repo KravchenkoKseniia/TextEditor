@@ -14,12 +14,10 @@ bool file_exists(const char* filename)
 	FILE* file = nullptr;
 	
 	errno_t err;
-	
-	err = fopen_s(&file, filename, "r");
 
 	bool is_exists = false;
 
-	if (err == 0)
+	if (fopen_s(&file, filename, "r") == 0)
 	{
 		is_exists = true;
 		fclose(file);
