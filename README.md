@@ -12,7 +12,11 @@
 
 [6. Implement substring search mechanism](#pa6) 
 
-[7. Implement substring insertion mechanism](#pa7) 
+[7. Implement substring insertion mechanism](#pa7)
+
+[8. Implement the console clearing mechanism](#pa8)
+
+[9. Test plan](#pa9)
 
 <a name="pa1"></a>
 ### Implement input command parser 
@@ -50,6 +54,11 @@
 ![clean](https://github.com/KravchenkoKseniia/TextEditor/assets/145661899/19c211f4-c93b-4396-897d-26bba5a09694)
 
 
+
+<a name="pa9"></a>
+### Test plan
+![image](https://github.com/KravchenkoKseniia/TextEditor/assets/145661899/c4ec7e9f-9a7d-4afd-818d-c41e09efc7ec)
+![image](https://github.com/KravchenkoKseniia/TextEditor/assets/145661899/4d5bb7b2-31ef-4540-842e-183d101663bb)
 
 
 
